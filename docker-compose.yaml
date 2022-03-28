@@ -12,5 +12,5 @@ services:
     # volumes:
     #   - sqlserver_data:/var/opt/mssql/data:rw
 
-volumes:
-  sqlserver_data:
+# volumes:
+#   sqlserver_data:
