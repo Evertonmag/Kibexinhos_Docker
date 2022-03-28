@@ -1,16 +1,16 @@
 version: '3.9'
 
 services:
-  db.kibexinhos:
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=yourStrongPassword!
-    container_name: db.kibexinhos
-    ports:
-      - "1433:1433"
-    # volumes:
-    #   - sqlserver_data:/var/opt/mssql/data:rw
+  # db.kibexinhos:
+  #   image: mcr.microsoft.com/mssql/server:2019-latest
+  #   environment:
+  #     - ACCEPT_EULA=Y
+  #     - SA_PASSWORD=yourStrongPassword!
+  #   container_name: db.kibexinhos
+  #   ports:
+  #     - "1433:1433"
+  #   # volumes:
+  #   #   - sqlserver_data:/var/opt/mssql/data:rw
   
   api.kibexinhos:
     image: apikibexinhos
@@ -22,7 +22,7 @@ services:
       - "5101:5101"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS="http://0.0.0.0:5001;https://0.0.0.0:5101"
+      - ASPNETCORE_URLS=http://0.0.0.0:5001;https://0.0.0.0:5101
       - ConnectionStrings__DefaultConnection=SQLSERVERCONNECTIONSTRING
 # volumes:
 #   sqlserver_data:
