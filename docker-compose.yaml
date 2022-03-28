@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  db.kibexinhos:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=yourStrongPassword!
+    container_name: db.kibexinhos
+    ports:
+      - "1433:1433"
+    # volumes:
+    #   - sqlserver_data:/var/opt/mssql/data:rw
+
+volumes:
+  sqlserver_data:
