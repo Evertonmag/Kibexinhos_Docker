@@ -11,6 +11,15 @@ services:
       - "1433:1433"
     # volumes:
     #   - sqlserver_data:/var/opt/mssql/data:rw
+  
+  api.kibexinhos:
+    image: apikibexinhos
+    build: 
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
 
 # volumes:
 #   sqlserver_data:
