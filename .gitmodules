@@ -1,0 +1,6 @@
+[submodule "api"]
+	path = api
+	url = https://github.com/vieiraguilhermee/Kibexinhos-tcc.git
+[submodule "client"]
+	path = client
+	url = https://github.com/guilhermelima18/kibexinhos-frontend.git
