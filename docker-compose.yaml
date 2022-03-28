@@ -18,8 +18,11 @@ services:
       context: ./api
       dockerfile: Dockerfile
     ports:
-      - "80:80"
-      - "443:443"
-
+      - "5001:5001"
+      - "5101:5101"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS="http://0.0.0.0:5001;https://0.0.0.0:5101"
+      - ConnectionStrings__DefaultConnection=SQLSERVERCONNECTIONSTRING
 # volumes:
 #   sqlserver_data:
