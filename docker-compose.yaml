@@ -1,28 +1,74 @@
 version: '3.9'
-
 services:
-  # db.kibexinhos:
-  #   image: mcr.microsoft.com/mssql/server:2019-latest
-  #   environment:
-  #     - ACCEPT_EULA=Y
-  #     - SA_PASSWORD=yourStrongPassword!
-  #   container_name: db.kibexinhos
+  # portainer:
+  #   container_name: portainer
+  #   image: portainer/portainer-ce:alpine
+  #   restart: unless-stopped
   #   ports:
-  #     - "1433:1433"
-  #   # volumes:
-  #   #   - sqlserver_data:/var/opt/mssql/data:rw
-  
+  #     - "9000:9000"
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #     - portainer_data:/data
+  swag:
+    container_name: swag
+    image: linuxserver/swag:1.25.0
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Sao_Paulo
+      - VALIDATION=http
+      - URL=well1ngton.site
+      - SUBDOMAINS=www,api,portainer,heimdall
+      - ONLY_SUBDOMAINS=false
+      - STAGING=true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - swag_data:/config
+  db.kibexinhos:
+    container_name: db.kibexinhos
+    restart: unless-stopped
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=yourStrongPassword!
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql:rw
+    # healthcheck:
+    #   test:
+    #     [
+    #       "CMD",
+    #       "/opt/mssql-tools/bin/sqlcmd",
+    #       "-U sa",
+    #       "-P yourStrongPassword!",
+    #       "-Q",
+    #       "select 1"
+    #     ]
+    #   interval: 1s
+    #   retries: 20
   api.kibexinhos:
+    container_name: api.kibexinhos
     image: apikibexinhos
-    build: 
+    build:
       context: ./api
       dockerfile: Dockerfile
+    restart: unless-stopped
     ports:
       - "5001:5001"
-      - "5101:5101"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:5001;https://0.0.0.0:5101
-      - ConnectionStrings__DefaultConnection=SQLSERVERCONNECTIONSTRING
-# volumes:
-#   sqlserver_data:
+      - ASPNETCORE_URLS=http://0.0.0.0:5001
+      - ConnectionStrings__DefaultConnection=Server=db.kibexinhos,1433;Database=kibexinhos;User Id=sa;Password=yourStrongPassword!;
+    depends_on:
+      db.kibexinhos:
+        condition: service_started
+volumes:
+  sqlserver_data:
+  swag_data:
+  portainer_data:
