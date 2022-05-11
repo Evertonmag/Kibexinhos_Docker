@@ -1,34 +1,6 @@
 version: '3.9'
 services:
-  # portainer:
-  #   container_name: portainer
-  #   image: portainer/portainer-ce:alpine
-  #   restart: unless-stopped
-  #   ports:
-  #     - "9000:9000"
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock
-  #     - portainer_data:/data
-  swag:
-    container_name: swag
-    image: linuxserver/swag:1.25.0
-    restart: unless-stopped
-    cap_add:
-      - NET_ADMIN
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Sao_Paulo
-      - VALIDATION=http
-      - URL=well1ngton.site
-      - SUBDOMAINS=www,api,portainer,heimdall
-      - ONLY_SUBDOMAINS=false
-      - STAGING=true
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - swag_data:/config
+
   db.kibexinhos:
     container_name: db.kibexinhos
     restart: unless-stopped
@@ -40,18 +12,7 @@ services:
       - "1433:1433"
     volumes:
       - sqlserver_data:/var/opt/mssql:rw
-    # healthcheck:
-    #   test:
-    #     [
-    #       "CMD",
-    #       "/opt/mssql-tools/bin/sqlcmd",
-    #       "-U sa",
-    #       "-P yourStrongPassword!",
-    #       "-Q",
-    #       "select 1"
-    #     ]
-    #   interval: 1s
-    #   retries: 20
+
   api.kibexinhos:
     container_name: api.kibexinhos
     image: apikibexinhos
@@ -68,7 +29,51 @@ services:
     depends_on:
       db.kibexinhos:
         condition: service_started
+
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce:alpine
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
+  swag:
+    container_name: swag
+    image: linuxserver/swag:1.25.0
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Sao_Paulo
+      - VALIDATION=http
+      - URL=well1ngton.site
+      - SUBDOMAINS=www,api,portainer,heimdall
+      - ONLY_SUBDOMAINS=false
+      - STAGING=false
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - swag_data:/config
+
+  heimdall:
+    container_name: heimdall
+    image: ghcr.io/linuxserver/heimdall
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Sao_Paulo
+    volumes:
+      - heimdall_data:/config
+
 volumes:
   sqlserver_data:
   swag_data:
   portainer_data:
+  heimdall_data:
