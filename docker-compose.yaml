@@ -17,7 +17,7 @@ services:
     container_name: api.kibexinhos
     image: apikibexinhos
     build:
-      context: ./api
+      context: ./api/KibexinhosApi
       dockerfile: src/Dockerfile
     restart: unless-stopped
     ports:
