@@ -60,7 +60,3 @@ cd Kibexinhos_Docker
 # Compilando e executando o projeto
 docker-compose up --detach --build
 ```
-
-### Alternativa docker context
-
-Não lembro como configurar contextos remotos de docker, mas essa seria a melhor opção. O integrante do grupo "Magagnatto" se ofereceu para atualizar essa seção explicando os passos necessários. Aguardando update do integrante "Magagnatto".
